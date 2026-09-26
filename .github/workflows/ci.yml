@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  # ── Backend: pytest ──────────────────────────────────────────────────────────
+  backend-tests:
+    name: Backend – pytest
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: gymuser
+          POSTGRES_PASSWORD: gympassword
+          POSTGRES_DB: ai_gym_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gymuser -d ai_gym_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # database.py normalises postgresql:// → postgresql+psycopg://
+      DATABASE_URL: postgresql://gymuser:gympassword@localhost:5432/ai_gym_test
+      JWT_SECRET_KEY: ci-test-secret-key-not-for-production
+      JWT_ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 60
+      MQTT_BROKER_HOST: localhost
+      MQTT_BROKER_PORT: "1883"
+      MQTT_TOPIC_PREFIX: gym/smart_gym
+      MQTT_ENABLED: "false"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Install pytest (if not already in requirements.txt)
+        run: pip install pytest pytest-asyncio httpx
+
+      - name: Run backend tests
+        working-directory: backend
+        run: |
+          pytest test_phase_1_users.py \
+                 test_phase_2_api.py \
+                 test_phase_3_performance.py \
+                 test_phase_4_nutrition.py \
+                 test_phase_5_buddy.py \
+                 test_phase_6_habit.py \
+                 test_phase_7_planner.py \
+                 test_phase_8_iot.py \
+                 test_phase_9_analytics.py \
+                 test_phase_10_storage.py \
+                 test_phase_11_integration.py \
+                 smoke_test_e2e.py \
+                 -v --tb=short
+
+  # ── Frontend: lint + build ────────────────────────────────────────────────────
+  frontend-checks:
+    name: Frontend – lint & build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+        env:
+          # Provide a dummy API URL so any NEXT_PUBLIC_* references don't break
+          NEXT_PUBLIC_API_URL: http://localhost:8000

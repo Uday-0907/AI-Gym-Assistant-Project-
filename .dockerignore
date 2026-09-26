@@ -1,0 +1,56 @@
+# ── Root .dockerignore ────────────────────────────────────────────────────────
+# Applied when docker-compose builds any service from the repo root context.
+# Each service Dockerfile also has its own .dockerignore in its subdirectory.
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Version control
+.git
+.gitignore
+
+# Python
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/.venv
+**/venv
+**/env
+
+# Node
+**/node_modules
+**/.next
+**/out
+**/dist
+
+# Secrets – never bake into images
+**/.env
+**/.env.*
+!**/.env.example
+
+# Uploaded media (mounted as a volume at runtime)
+backend/uploads/*
+
+# Documentation binaries
+docs/*.docx
+docs/*.pdf
+
+# ML / model artefacts
+**/*.pt
+**/*.pth
+**/*.onnx
+**/*.h5
+**/*.keras
+**/*.task
+**/*.joblib
+**/*.pkl
+
+# Logs & temp
+**/*.log
+**/logs
+**/*.tmp
+**/*.temp
+
+# OS
+.DS_Store
+Thumbs.db

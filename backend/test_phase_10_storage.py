@@ -5,6 +5,7 @@ import os
 import sys
 import unittest
 from datetime import datetime
+from typing import Tuple
 from sqlalchemy import select, text, func
 
 # Append backend directory to sys.path

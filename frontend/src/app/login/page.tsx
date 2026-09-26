@@ -57,22 +57,22 @@ export default function Login() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white p-4">
+    <main className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)] p-4">
 
-      <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
+      <div className="w-full max-w-md rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-8 shadow-none">
 
         <h1 className="text-3xl font-bold">
           Login
         </h1>
 
-        <p className="mt-3 text-slate-400">
-          Login to your AI Gym Fitness Assistant account.
+        <p className="mt-3 text-[var(--text-secondary)]">
+          Login to your PulseAi account.
         </p>
 
         <form onSubmit={handleLogin} className="mt-8 space-y-5">
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
+            <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
               Email
             </label>
 
@@ -82,12 +82,12 @@ export default function Login() {
               onChange={(event) => setEmail(event.target.value)}
               placeholder="Enter your email"
               required
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
+            <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
               Password
             </label>
 
@@ -97,7 +97,7 @@ export default function Login() {
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Enter your password"
               required
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
             />
           </div>
 
@@ -110,14 +110,14 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-5 py-3 font-semibold hover:bg-blue-700 transition disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg bg-[var(--accent)] px-5 py-3 font-semibold text-[#06121A] hover:opacity-90 transition disabled:cursor-not-allowed disabled:opacity-50 shadow-none"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          <div className="pt-2 text-center text-sm text-slate-400">
+          <div className="pt-2 text-center text-sm text-[var(--text-secondary)]">
             Don&apos;t have an account?{" "}
-            <a href="/register" className="font-semibold text-blue-400 hover:text-blue-300 underline">
+            <a href="/register" className="font-semibold text-[var(--accent)] hover:opacity-80 underline">
               Create account
             </a>
           </div>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { API_BASE_URL } from "@/api/config";
+import Navbar from "@/components/Navbar";
 
 interface Exercise {
   id: number;
@@ -284,12 +285,6 @@ export default function WorkoutPage() {
   useEffect(() => {
     selectedExerciseIdRef.current = selectedExerciseId;
     exercisesRef.current = exercises;
-    const activeEx = exercises.find((e) => e.id === selectedExerciseId);
-    if (activeEx) {
-      setActiveAnalyzerName(activeEx.name);
-      setCallbackExerciseName(activeEx.name);
-      setFsmExerciseName(activeEx.name);
-    }
   }, [selectedExerciseId, exercises]);
 
   // Load available exercises & check auth
@@ -306,11 +301,15 @@ export default function WorkoutPage() {
         if (!res.ok) throw new Error("Failed to load exercises");
         const data = await res.json();
         setExercises(data);
+        exercisesRef.current = data;
         if (data.length > 0) {
           const squat = data.find((e: Exercise) => e.name.toLowerCase().includes("squat"));
-          const initId = squat ? squat.id : data[0].id;
-          setSelectedExerciseId(initId);
-          selectedExerciseIdRef.current = initId;
+          const initEx = squat || data[0];
+          setSelectedExerciseId(initEx.id);
+          selectedExerciseIdRef.current = initEx.id;
+          setActiveAnalyzerName(initEx.name);
+          setCallbackExerciseName(initEx.name);
+          setFsmExerciseName(initEx.name);
         }
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -1014,33 +1013,12 @@ export default function WorkoutPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white p-4 md:p-8">
-      {/* Header */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between border-b border-slate-800 pb-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
-            AI Gym Trainer
-          </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1">
-            Real-Time Computer Vision & Biomechanical Rep Tracking
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Link
-            href="/history"
-            className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-xs md:text-sm font-medium hover:bg-slate-800 transition"
-          >
-            History
-          </Link>
-          <Link
-            href="/dashboard"
-            className="rounded-lg border border-slate-700 px-4 py-2 text-xs md:text-sm font-medium hover:bg-slate-800 transition"
-          >
-            Dashboard
-          </Link>
-        </div>
-      </header>
+    <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
+      <Navbar
+        title="PulseAi"
+        subtitle="PulseAi Trainer — Real-Time Computer Vision & Biomechanical Rep Tracking"
+      />
+      <div className="p-4 md:p-8 max-w-7xl mx-auto">
 
       {/* Error Banner */}
       {error && (
@@ -1191,11 +1169,11 @@ export default function WorkoutPage() {
 
             {/* Exercise Selector */}
             <div className="mt-5 space-y-2">
-              <label className="text-xs font-medium text-slate-300">Target Exercise</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">Target Exercise</label>
               <select
                 value={selectedExerciseId}
                 onChange={(e) => handleExerciseChange(Number(e.target.value))}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
               >
                 {exercises.map((ex) => (
                   <option key={ex.id} value={ex.id}>
@@ -1204,7 +1182,7 @@ export default function WorkoutPage() {
                 ))}
               </select>
               {exercises.find((e) => e.id === selectedExerciseId)?.description && (
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-[var(--text-secondary)] mt-1">
                   {exercises.find((e) => e.id === selectedExerciseId)?.description}
                 </p>
               )}
@@ -1217,7 +1195,7 @@ export default function WorkoutPage() {
                   type="button"
                   disabled={loading}
                   onClick={handleStartWorkout}
-                  className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-teal-600 py-3 text-sm font-semibold text-white hover:from-blue-500 hover:to-teal-500 shadow-lg shadow-blue-500/20 transition disabled:opacity-50"
+                  className="w-full rounded-xl bg-[var(--accent)] py-3 text-sm font-semibold text-[#06121A] hover:opacity-90 shadow-none transition disabled:opacity-50"
                 >
                   {loading ? "Starting Session..." : "Start Workout"}
                 </button>
@@ -1226,7 +1204,7 @@ export default function WorkoutPage() {
                   type="button"
                   disabled={loading}
                   onClick={handleFinishWorkout}
-                  className="w-full rounded-xl bg-gradient-to-r from-red-600 to-rose-600 py-3 text-sm font-semibold text-white hover:from-red-500 hover:to-rose-500 shadow-lg shadow-red-500/20 transition disabled:opacity-50"
+                  className="w-full rounded-xl bg-gradient-to-r from-red-600 to-rose-600 py-3 text-sm font-semibold text-white hover:from-red-500 hover:to-rose-500 shadow-none transition disabled:opacity-50"
                 >
                   {loading ? "Finalizing Session..." : "Finish Workout"}
                 </button>
@@ -1235,38 +1213,38 @@ export default function WorkoutPage() {
 
             {/* Live Session Stats */}
             {sessionActive && (
-              <div className="mt-6 border-t border-slate-800 pt-4 space-y-3">
+              <div className="mt-6 border-t border-[var(--border)] pt-4 space-y-3">
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Elapsed Time:</span>
-                  <span className="font-semibold text-white">{formatTime(elapsedSeconds)}</span>
+                  <span className="text-[var(--text-secondary)]">Elapsed Time:</span>
+                  <span className="font-semibold text-[var(--text-primary)]">{formatTime(elapsedSeconds)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Total Reps Counted:</span>
-                  <span className="font-semibold text-white">{reps}</span>
+                  <span className="text-[var(--text-secondary)]">Total Reps Counted:</span>
+                  <span className="font-semibold text-[var(--text-primary)]">{reps}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Est. Calories Burned:</span>
-                  <span className="font-semibold text-emerald-400">{(reps * 0.45).toFixed(1)} kcal</span>
+                  <span className="text-[var(--text-secondary)]">Est. Calories Burned:</span>
+                  <span className="font-semibold text-[var(--accent-live)]">{(reps * 0.45).toFixed(1)} kcal</span>
                 </div>
               </div>
             )}
           </div>
 
           {/* Form Rules Guide Card */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 space-y-3 text-xs text-slate-400">
-            <h3 className="text-sm font-semibold text-slate-200">Biomechanical Form Rules</h3>
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-6 space-y-3 text-xs text-[var(--text-secondary)] shadow-none">
+            <h3 className="text-sm font-semibold text-[var(--text-primary)]">Biomechanical Form Rules</h3>
             <ul className="space-y-2 list-disc list-inside">
               <li>
-                <strong className="text-slate-300">Squats:</strong> Knee flexion &lt; 105° (femur horizontal).
+                <strong className="text-[var(--text-primary)]">Squats:</strong> Knee flexion &lt; 105° (femur horizontal).
               </li>
               <li>
-                <strong className="text-slate-300">Bicep Curls:</strong> Full arm extension (&ge; 135°) to peak flex (&le; 65°).
+                <strong className="text-[var(--text-primary)]">Bicep Curls:</strong> Full arm extension (&ge; 135°) to peak flex (&le; 65°).
               </li>
               <li>
-                <strong className="text-slate-300">Push-ups:</strong> Plank lockout (&ge; 135°) to chest depth (&le; 95°).
+                <strong className="text-[var(--text-primary)]">Push-ups:</strong> Plank lockout (&ge; 135°) to chest depth (&le; 95°).
               </li>
               <li>
-                <strong className="text-slate-300">Anti-False-Positive:</strong> Requires valid 3-frame starting calibration.
+                <strong className="text-[var(--text-primary)]">Anti-False-Positive:</strong> Requires valid 3-frame starting calibration.
               </li>
             </ul>
           </div>
@@ -1276,21 +1254,21 @@ export default function WorkoutPage() {
       {/* Post-Workout Summary Modal */}
       {completedSummary && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 md:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="w-full max-w-2xl rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-6 md:p-8 shadow-none space-y-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
               <div>
-                <h2 className="text-2xl font-bold text-white">Workout Session Complete 🎉</h2>
-                <p className="text-sm text-slate-400">{completedSummary.exercise_name} Analysis</p>
+                <h2 className="text-2xl font-bold text-[var(--text-primary)]">Workout Session Complete 🎉</h2>
+                <p className="text-sm text-[var(--text-secondary)]">{completedSummary.exercise_name} Analysis</p>
               </div>
               <span
                 className={`rounded-full px-3 py-1 text-xs font-bold ${
                   completedSummary.total_reps === 0
-                    ? "bg-slate-800 text-slate-300 border border-slate-700"
+                    ? "bg-[var(--bg-base)] text-[var(--text-secondary)] border border-[var(--border)]"
                     : completedSummary.rating === "EXCELLENT"
-                    ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
+                    ? "bg-[var(--accent-live)]/10 text-[var(--accent-live)] border border-[var(--accent-live)]/40"
                     : completedSummary.rating === "GOOD"
-                    ? "bg-blue-950 text-blue-300 border border-blue-700"
-                    : "bg-amber-950 text-amber-300 border border-amber-700"
+                    ? "bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/40"
+                    : "bg-amber-500/10 text-amber-400 border border-amber-500/40"
                 }`}
               >
                 {completedSummary.total_reps === 0 ? "NO REPS RECORDED" : completedSummary.rating}
@@ -1299,108 +1277,108 @@ export default function WorkoutPage() {
 
             {/* Score Showcase */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                <span className="text-xs text-slate-400 uppercase tracking-wider">Score</span>
-                <p className="text-3xl font-black text-teal-400 mt-1">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-base)] p-4">
+                <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Score</span>
+                <p className="text-3xl font-black text-[var(--accent)] mt-1 font-mono">
                   {completedSummary.total_reps === 0 ? "N/A" : completedSummary.performance_score}
                 </p>
-                <span className="text-[10px] text-slate-500">
+                <span className="text-[10px] text-[var(--text-secondary)]">
                   {completedSummary.total_reps === 0 ? "no score" : "out of 100"}
                 </span>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                <span className="text-xs text-slate-400 uppercase tracking-wider">Reps</span>
-                <p className="text-3xl font-black text-white mt-1">{completedSummary.total_reps}</p>
-                <span className="text-[10px] text-slate-500">completed</span>
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-base)] p-4">
+                <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Reps</span>
+                <p className="text-3xl font-black text-[var(--text-primary)] mt-1 font-mono">{completedSummary.total_reps}</p>
+                <span className="text-[10px] text-[var(--text-secondary)]">completed</span>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                <span className="text-xs text-slate-400 uppercase tracking-wider">Duration</span>
-                <p className="text-3xl font-black text-white mt-1">
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-base)] p-4">
+                <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Duration</span>
+                <p className="text-3xl font-black text-[var(--text-primary)] mt-1 font-mono">
                   {formatTime(completedSummary.duration_seconds)}
                 </p>
-                <span className="text-[10px] text-slate-500">active time</span>
+                <span className="text-[10px] text-[var(--text-secondary)]">active time</span>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-                <span className="text-xs text-slate-400 uppercase tracking-wider">Calories</span>
-                <p className="text-3xl font-black text-emerald-400 mt-1">{completedSummary.calories}</p>
-                <span className="text-[10px] text-slate-500">kcal burned</span>
+              <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-base)] p-4">
+                <span className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">Calories</span>
+                <p className="text-3xl font-black text-[var(--accent-live)] mt-1 font-mono">{completedSummary.calories}</p>
+                <span className="text-[10px] text-[var(--text-secondary)]">kcal burned</span>
               </div>
             </div>
 
             {/* Biomechanical Factor Breakdown */}
-            <div className="space-y-3 rounded-xl border border-slate-800 bg-slate-950 p-5">
-              <h3 className="text-sm font-semibold text-slate-200">Biomechanical Factor Breakdown</h3>
+            <div className="space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-base)] p-5">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">Biomechanical Factor Breakdown</h3>
 
               {completedSummary.total_reps === 0 ? (
                 <div className="rounded-lg border border-amber-900/50 bg-amber-950/20 p-4 text-center space-y-1.5">
                   <span className="text-xl">⚠️</span>
                   <h4 className="text-xs font-semibold text-amber-300">No Valid Repetitions Recorded</h4>
-                  <p className="text-[11px] text-slate-400">
+                  <p className="text-[11px] text-[var(--text-secondary)]">
                     Biomechanical performance score unavailable. Perform at least one valid repetition to calculate factor analytics.
                   </p>
                 </div>
               ) : (
                 <div className="space-y-2 text-xs">
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-[var(--text-secondary)] mb-1">
                       <span>Range of Motion (Depth)</span>
-                      <span className="font-semibold">{completedSummary.breakdown.rom}%</span>
+                      <span className="font-semibold text-[var(--text-primary)]">{completedSummary.breakdown.rom}%</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                    <div className="h-2 w-full rounded-full bg-[var(--border)] overflow-hidden">
                       <div
-                        className="h-full bg-teal-500 transition-all duration-500"
+                        className="h-full bg-[var(--accent)] transition-all duration-500"
                         style={{ width: `${completedSummary.breakdown.rom}%` }}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-[var(--text-secondary)] mb-1">
                       <span>Tempo & Cadence</span>
-                      <span className="font-semibold">{completedSummary.breakdown.tempo}%</span>
+                      <span className="font-semibold text-[var(--text-primary)]">{completedSummary.breakdown.tempo}%</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                    <div className="h-2 w-full rounded-full bg-[var(--border)] overflow-hidden">
                       <div
-                        className="h-full bg-blue-500 transition-all duration-500"
+                        className="h-full bg-[var(--accent)] transition-all duration-500"
                         style={{ width: `${completedSummary.breakdown.tempo}%` }}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-[var(--text-secondary)] mb-1">
                       <span>Movement Stability</span>
-                      <span className="font-semibold">{completedSummary.breakdown.stability}%</span>
+                      <span className="font-semibold text-[var(--text-primary)]">{completedSummary.breakdown.stability}%</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                    <div className="h-2 w-full rounded-full bg-[var(--border)] overflow-hidden">
                       <div
-                        className="h-full bg-purple-500 transition-all duration-500"
+                        className="h-full bg-[var(--accent)] transition-all duration-500"
                         style={{ width: `${completedSummary.breakdown.stability}%` }}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-[var(--text-secondary)] mb-1">
                       <span>Form Alignment & Posture</span>
-                      <span className="font-semibold">{completedSummary.breakdown.form}%</span>
+                      <span className="font-semibold text-[var(--text-primary)]">{completedSummary.breakdown.form}%</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                    <div className="h-2 w-full rounded-full bg-[var(--border)] overflow-hidden">
                       <div
-                        className="h-full bg-emerald-500 transition-all duration-500"
+                        className="h-full bg-[var(--accent-live)] transition-all duration-500"
                         style={{ width: `${completedSummary.breakdown.form}%` }}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-slate-300 mb-1">
+                    <div className="flex justify-between text-[var(--text-secondary)] mb-1">
                       <span>Trajectory Smoothness (Minimum Jerk)</span>
-                      <span className="font-semibold">{completedSummary.breakdown.smoothness}%</span>
+                      <span className="font-semibold text-[var(--text-primary)]">{completedSummary.breakdown.smoothness}%</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-800 overflow-hidden">
+                    <div className="h-2 w-full rounded-full bg-[var(--border)] overflow-hidden">
                       <div
-                        className="h-full bg-indigo-500 transition-all duration-500"
+                        className="h-full bg-[var(--accent)] transition-all duration-500"
                         style={{ width: `${completedSummary.breakdown.smoothness}%` }}
                       />
                     </div>
@@ -1410,8 +1388,8 @@ export default function WorkoutPage() {
             </div>
 
             {/* Coaching Insights */}
-            <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950 p-5 text-xs text-slate-300">
-              <h3 className="text-sm font-semibold text-slate-200">AI Coaching Feedback</h3>
+            <div className="space-y-2 rounded-xl border border-[var(--border)] bg-[var(--bg-base)] p-5 text-xs text-[var(--text-secondary)]">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">AI Coaching Feedback</h3>
               <ul className="space-y-1.5 list-disc list-inside">
                 {completedSummary.feedback_cues.map((cue, idx) => (
                   <li key={idx}>{cue}</li>
@@ -1424,13 +1402,13 @@ export default function WorkoutPage() {
               <button
                 type="button"
                 onClick={() => setCompletedSummary(null)}
-                className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-medium hover:bg-slate-800 transition"
+                className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--text-secondary)] hover:bg-[var(--border)]/30 transition"
               >
                 Close
               </button>
               <Link
                 href="/history"
-                className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-500 transition"
+                className="rounded-lg bg-[var(--accent)] px-5 py-2 text-sm font-semibold text-[#06121A] hover:opacity-90 transition shadow-none"
               >
                 View History & Trends
               </Link>
@@ -1438,6 +1416,7 @@ export default function WorkoutPage() {
           </div>
         </div>
       )}
+      </div>
     </main>
   );
 }

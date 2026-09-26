@@ -90,7 +90,7 @@ class TestPhase1UserFoundation(unittest.TestCase):
     def setUpClass(cls):
         Base.metadata.create_all(bind=engine)
         with SessionLocal() as db:
-            for email in ["phase1_user_a@example.com", "phase1_user_b@example.com"]:
+            for email in ["phase1_user_a@example.com", "phase1_user_b@example.com", "phase1_cascade_throwaway@example.com"]:
                 old = db.query(User).filter(User.email == email).first()
                 if old:
                     db.delete(old)
@@ -250,15 +250,42 @@ class TestPhase1UserFoundation(unittest.TestCase):
     def test_09_user_profile_cascade_deletion(self):
         """9. Deleting User automatically deletes Profile via CASCADE relationship."""
         with SessionLocal() as db:
-            u_b = db.query(User).filter(User.email == "phase1_user_b@example.com").first()
-            if u_b:
-                user_id = u_b.id
-                db.delete(u_b)
+            old = db.query(User).filter(User.email == "phase1_cascade_throwaway@example.com").first()
+            if old:
+                db.delete(old)
                 db.commit()
 
-                # Verify Profile is also deleted automatically
-                prof_b = db.query(Profile).filter(Profile.user_id == user_id).first()
-                self.assertIsNone(prof_b)
+            temp_user = User(
+                name="Phase1 Cascade Throwaway",
+                email="phase1_cascade_throwaway@example.com",
+                password_hash="temp_hashed_secret",
+            )
+            db.add(temp_user)
+            db.commit()
+            db.refresh(temp_user)
+
+            temp_profile = Profile(
+                user_id=temp_user.id,
+                height_cm=175.0,
+                weight_kg=70.0,
+                fitness_goal="general_fitness",
+            )
+            db.add(temp_profile)
+            db.commit()
+
+            user_id = temp_user.id
+
+            # Verify Profile exists prior to User deletion
+            prof = db.query(Profile).filter(Profile.user_id == user_id).first()
+            self.assertIsNotNone(prof)
+
+            # Delete User
+            db.delete(temp_user)
+            db.commit()
+
+            # Verify Profile is also deleted automatically via CASCADE
+            prof_deleted = db.query(Profile).filter(Profile.user_id == user_id).first()
+            self.assertIsNone(prof_deleted)
 
 
 if __name__ == "__main__":

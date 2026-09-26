@@ -87,41 +87,41 @@ export default function Register() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white p-4">
-      <div className="w-full max-w-md rounded-xl border border-slate-800 bg-slate-900 p-8 shadow-2xl">
+    <main className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)] p-4">
+      <div className="w-full max-w-md rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-8 shadow-none">
         <h1 className="text-3xl font-bold">Create Account</h1>
 
-        <p className="mt-3 text-slate-400">
-          Join AI Gym Fitness Assistant to track workouts, nutrition & performance.
+        <p className="mt-3 text-[var(--text-secondary)]">
+          Join PulseAi to track workouts, nutrition & performance.
         </p>
 
         <form onSubmit={handleRegister} className="mt-8 space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium">Full Name</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">Full Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your full name"
               required
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">Email Address</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">Password</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">Password</label>
             <input
               type="password"
               value={password}
@@ -129,12 +129,12 @@ export default function Register() {
               placeholder="Create a password"
               required
               minLength={6}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">Confirm Password</label>
+            <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}
@@ -142,7 +142,7 @@ export default function Register() {
               placeholder="Confirm your password"
               required
               minLength={6}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
             />
           </div>
 
@@ -153,7 +153,7 @@ export default function Register() {
           )}
 
           {success && (
-            <p className="rounded-lg bg-emerald-900/30 border border-emerald-800/50 p-3 text-sm text-emerald-400">
+            <p className="rounded-lg bg-[var(--accent-live)]/10 border border-[var(--accent-live)]/40 p-3 text-sm text-[var(--accent-live)]">
               {success}
             </p>
           )}
@@ -161,14 +161,14 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-5 py-3 font-semibold hover:bg-blue-700 transition disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg bg-[var(--accent)] px-5 py-3 font-semibold text-[#06121A] hover:opacity-90 transition disabled:cursor-not-allowed disabled:opacity-50 shadow-none"
           >
             {loading ? "Creating Account..." : "Create Account"}
           </button>
 
-          <div className="pt-2 text-center text-sm text-slate-400">
+          <div className="pt-2 text-center text-sm text-[var(--text-secondary)]">
             Already have an account?{" "}
-            <Link href="/login" className="font-semibold text-blue-400 hover:text-blue-300 underline">
+            <Link href="/login" className="font-semibold text-[var(--accent)] hover:opacity-80 underline">
               Log in
             </Link>
           </div>

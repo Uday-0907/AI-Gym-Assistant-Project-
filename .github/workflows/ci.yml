@@ -54,6 +54,10 @@ jobs:
       - name: Install pytest (if not already in requirements.txt)
         run: pip install pytest pytest-asyncio httpx
 
+      - name: Initialize and seed test database
+        working-directory: backend
+        run: python create_tables.py
+
       - name: Run backend tests
         working-directory: backend
         run: |

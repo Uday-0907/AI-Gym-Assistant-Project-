@@ -3,6 +3,7 @@
 import { useEffect, useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/api/config";
+import Navbar from "@/components/Navbar";
 
 interface MediaAsset {
   id: number;
@@ -199,100 +200,87 @@ export default function StoragePage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
-        <p className="text-slate-400">Loading Storage & Media Manager...</p>
+      <main className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)]">
+        <p className="text-[var(--text-secondary)]">Loading Storage & Media Manager...</p>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 p-6 md:p-8 text-white">
-      {/* Navigation & Header */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
-            Media & Storage Infrastructure
-          </h1>
-          <p className="mt-1 text-slate-400 text-sm">
-            Centralized file uploads, cloud storage simulation, and asset management
-          </p>
-        </div>
-
-        <button
-          onClick={() => router.push("/dashboard")}
-          className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium hover:bg-slate-800 transition"
-        >
-          ← Back to Dashboard
-        </button>
-      </header>
+    <main className="min-h-screen bg-[var(--bg-base)] p-6 md:p-8 text-[var(--text-primary)]">
+      {/* Shared Unified Header Navigation */}
+      <Navbar
+        title="PulseAi"
+        subtitle="Media & Storage Infrastructure — Centralized file uploads, cloud storage simulation & asset management"
+      />
 
       {/* Notifications */}
-      <div className="mx-auto max-w-6xl mt-6">
+      <div className="mx-auto max-w-7xl mt-6">
         {error && (
-          <div className="mb-4 rounded-xl border border-red-900 bg-red-950/40 p-4 text-red-300 text-sm">
+          <div className="mb-4 rounded-xl border border-red-900/60 bg-[var(--bg-surface)] p-4 text-red-300 text-sm">
             ⚠️ {error}
           </div>
         )}
         {successMsg && (
-          <div className="mb-4 rounded-xl border border-emerald-900 bg-emerald-950/40 p-4 text-emerald-300 text-sm">
+          <div className="mb-4 rounded-xl border border-[var(--accent-live)]/40 bg-[var(--bg-surface)] p-4 text-[var(--accent-live)] text-sm">
             ✅ {successMsg}
           </div>
         )}
       </div>
 
       {/* Stats Summary Cards */}
-      <section className="mx-auto mt-2 grid max-w-6xl gap-4 md:grid-cols-4">
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <p className="text-xs text-slate-400 font-medium uppercase">Total Assets</p>
-          <p className="mt-2 text-3xl font-bold text-teal-400">{stats?.total_files ?? 0}</p>
+      <section className="mx-auto mt-2 grid max-w-7xl gap-4 md:grid-cols-4">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-5">
+          <p className="text-xs text-[var(--text-secondary)] font-medium uppercase">Total Assets</p>
+          <p className="mt-2 text-3xl font-mono font-bold text-[var(--accent)]">{stats?.total_files ?? 0}</p>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <p className="text-xs text-slate-400 font-medium uppercase">Storage Used</p>
-          <p className="mt-2 text-3xl font-bold text-blue-400">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-5">
+          <p className="text-xs text-[var(--text-secondary)] font-medium uppercase">Storage Used</p>
+          <p className="mt-2 text-3xl font-mono font-bold text-[var(--accent)]">
             {stats ? `${stats.total_mb} MB` : "0 MB"}
           </p>
-          <p className="text-xs text-slate-500 mt-1">({stats ? formatBytes(stats.total_bytes) : "0 Bytes"})</p>
+          <p className="text-xs text-[var(--text-secondary)] mt-1 font-mono">({stats ? formatBytes(stats.total_bytes) : "0 Bytes"})</p>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <p className="text-xs text-slate-400 font-medium uppercase">Max Per-File Size</p>
-          <p className="mt-2 text-3xl font-bold text-indigo-400">
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-5">
+          <p className="text-xs text-[var(--text-secondary)] font-medium uppercase">Max Per-File Size</p>
+          <p className="mt-2 text-3xl font-mono font-bold text-[var(--accent)]">
             {stats?.max_file_size_mb ?? 50} MB
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-          <p className="text-xs text-slate-400 font-medium uppercase">Storage Modes</p>
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-5">
+          <p className="text-xs text-[var(--text-secondary)] font-medium uppercase">Storage Modes</p>
           <div className="mt-2 flex flex-wrap gap-1">
-            <span className="rounded bg-teal-950 border border-teal-700 px-2 py-0.5 text-xs text-teal-300 font-medium">Local</span>
-            <span className="rounded bg-blue-950 border border-blue-700 px-2 py-0.5 text-xs text-blue-300 font-medium">S3 Sim</span>
-            <span className="rounded bg-purple-950 border border-purple-700 px-2 py-0.5 text-xs text-purple-300 font-medium">GCS Sim</span>
+            <span className="rounded border border-[var(--border)] bg-transparent px-2 py-0.5 text-xs text-[var(--text-secondary)] font-medium">Local</span>
+            <span className="rounded border border-[var(--border)] bg-transparent px-2 py-0.5 text-xs text-[var(--text-secondary)] font-medium">S3 Sim</span>
+            <span className="rounded border border-[var(--border)] bg-transparent px-2 py-0.5 text-xs text-[var(--text-secondary)] font-medium">GCS Sim</span>
           </div>
         </div>
       </section>
 
       {/* Upload Section */}
-      <section className="mx-auto mt-6 max-w-6xl rounded-xl border border-slate-800 bg-slate-900 p-6">
-        <h2 className="text-xl font-semibold mb-4 text-white">Upload New Asset</h2>
+      <section className="mx-auto mt-6 max-w-7xl rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-6">
+        <h2 className="text-xl font-semibold mb-4 text-[var(--text-primary)]">Upload New Asset</h2>
 
         <form onSubmit={handleUpload} className="grid gap-4 md:grid-cols-4 items-end">
           <div className="md:col-span-2">
-            <label className="block text-xs text-slate-400 mb-1">Select File (Max 50MB)</label>
+            <label className="block text-xs text-[var(--text-secondary)] mb-1">Select File (Max 50MB)</label>
             <input
               id="file-input"
               type="file"
               onChange={handleFileChange}
-              className="w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-900/60 file:text-teal-300 hover:file:bg-teal-800/80 cursor-pointer border border-slate-700 rounded-lg p-1 bg-slate-950"
+              className="w-full text-sm text-[var(--text-secondary)] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-[var(--border)] file:text-xs file:font-semibold file:bg-transparent file:text-[var(--accent)] hover:file:bg-[var(--accent)]/10 cursor-pointer border border-[var(--border)] rounded-lg p-1 bg-[var(--bg-base)]"
             />
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1">Category</label>
+            <label className="block text-xs text-[var(--text-secondary)] mb-1">Category</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]"
             >
               <option value="general">General</option>
               <option value="workout_video">Workout Video</option>
@@ -303,11 +291,11 @@ export default function StoragePage() {
           </div>
 
           <div>
-            <label className="block text-xs text-slate-400 mb-1">Storage Provider</label>
+            <label className="block text-xs text-[var(--text-secondary)] mb-1">Storage Provider</label>
             <select
               value={storageProvider}
               onChange={(e) => setStorageProvider(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-teal-500"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent)]"
             >
               <option value="local">Local Storage</option>
               <option value="s3_simulation">AWS S3 (Simulated)</option>
@@ -319,7 +307,7 @@ export default function StoragePage() {
             <button
               type="submit"
               disabled={uploading || !selectedFile}
-              className="rounded-lg bg-gradient-to-r from-teal-600 to-blue-600 px-6 py-2 text-sm font-semibold text-white hover:from-teal-500 hover:to-blue-500 disabled:opacity-50 transition"
+              className="rounded-lg bg-[var(--accent)] px-6 py-2 text-sm font-semibold text-[#06121A] hover:opacity-90 disabled:opacity-50 transition"
             >
               {uploading ? "Uploading..." : "Upload Asset"}
             </button>

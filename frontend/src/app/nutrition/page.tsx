@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { API_BASE_URL } from "@/api/config";
+import Navbar from "@/components/Navbar";
 
 interface BMIResponse {
   height_cm: number;
@@ -369,45 +369,12 @@ export default function NutritionPage() {
   }, [foodSearch, foodsCatalogue]);
 
   return (
-    <main className="min-h-screen bg-slate-950 p-4 md:p-8 text-white font-sans">
-      {/* Navigation Header */}
-      <header className="mx-auto flex max-w-6xl flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-5 gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <span className="rounded-md bg-emerald-950 border border-emerald-700 px-2.5 py-0.5 text-xs font-bold tracking-wide text-emerald-300 uppercase">
-              AI Nutrition Assistant
-            </span>
-            <span className="text-xs text-slate-500">Nutrition + AI Dietician</span>
-          </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent mt-1.5">
-            Nutrition & AI Dietician
-          </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1">
-            Deterministic metabolic baselines, daily macronutrient tracking, and smart meal planning
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href="/dashboard"
-            className="rounded-lg border border-slate-800 bg-slate-900 px-3.5 py-1.5 text-xs md:text-sm font-medium hover:bg-slate-800 transition"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/reports"
-            className="rounded-lg border border-slate-800 bg-slate-900 px-3.5 py-1.5 text-xs md:text-sm font-medium hover:bg-slate-800 transition"
-          >
-            Weekly Intelligence
-          </Link>
-          <Link
-            href="/workout"
-            className="rounded-lg bg-blue-600 px-4 py-1.5 text-xs md:text-sm font-semibold text-white hover:bg-blue-500 shadow-md shadow-blue-600/30 transition"
-          >
-            + Start Workout
-          </Link>
-        </div>
-      </header>
+    <main className="min-h-screen bg-[var(--bg-base)] p-4 md:p-8 text-[var(--text-primary)] font-sans">
+      {/* Shared Unified Header Navigation */}
+      <Navbar
+        title="PulseAi"
+        subtitle="Nutrition & AI Dietician — Deterministic metabolic baselines, daily macronutrient tracking & smart meal planning"
+      />
 
       {/* Notifications */}
       {error && (

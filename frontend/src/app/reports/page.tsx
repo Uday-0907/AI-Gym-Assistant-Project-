@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { API_BASE_URL } from "@/api/config";
+import Navbar from "@/components/Navbar";
 
 interface ReportingPeriod {
   start_date: string;
@@ -103,7 +104,7 @@ export default function ReportsPage() {
   const chartPoints = useMemo(() => {
     if (!data?.session_history || data.session_history.length === 0) return [];
     return data.session_history.filter((s) => s.score !== null);
-  }, [data?.session_history]);
+  }, [data]);
 
   const svgDimensions = { width: 640, height: 180, padX: 45, padY: 25 };
   const chartPath = useMemo(() => {
@@ -157,79 +158,42 @@ export default function ReportsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 p-4 md:p-8 text-white font-sans">
-      {/* Navigation Header */}
-      <header className="mx-auto flex max-w-6xl flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-5 gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <span className="rounded-md bg-blue-950 border border-blue-700 px-2.5 py-0.5 text-xs font-bold tracking-wide text-blue-300 uppercase">
-              Performance Intelligence
-            </span>
-            <span className="text-xs text-slate-500">Pose-to-Performance Analyzer</span>
-          </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent mt-1.5">
-            Weekly Progress Intelligence
-          </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1">
-            Biomechanical trend analysis, recurrence detection, and deterministic coaching focus
-          </p>
-        </div>
+    <main className="min-h-screen bg-[var(--bg-base)] p-4 md:p-8 text-[var(--text-primary)] font-sans">
+      {/* Shared Unified Header Navigation */}
+      <Navbar
+        title="PulseAi"
+        subtitle="Weekly Progress Intelligence — Biomechanical trend analysis, recurrence detection & deterministic coaching focus"
+      />
 
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Time Window Selector */}
-          <div className="flex rounded-lg border border-slate-800 bg-slate-900/80 p-1 text-xs">
-            <button
-              onClick={() => setDays(7)}
-              className={`rounded-md px-3 py-1.5 font-medium transition ${
-                days === 7 ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
-              }`}
-            >
-              7 Days
-            </button>
-            <button
-              onClick={() => setDays(14)}
-              className={`rounded-md px-3 py-1.5 font-medium transition ${
-                days === 14 ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
-              }`}
-            >
-              14 Days
-            </button>
-            <button
-              onClick={() => setDays(30)}
-              className={`rounded-md px-3 py-1.5 font-medium transition ${
-                days === 30 ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
-              }`}
-            >
-              30 Days
-            </button>
-          </div>
-
-          <Link
-            href="/nutrition"
-            className="rounded-lg border border-emerald-600/50 bg-emerald-950/40 px-3.5 py-1.5 text-xs md:text-sm font-medium text-emerald-300 hover:bg-emerald-900/60 transition"
+      {/* Time Window Selector */}
+      <div className="mx-auto max-w-7xl flex items-center justify-between gap-4 mb-6">
+        <div className="flex rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] p-1 text-xs">
+          <button
+            onClick={() => setDays(7)}
+            className={`rounded-md px-3 py-1.5 font-medium transition ${
+              days === 7 ? "bg-[var(--accent)] text-[#06121A] font-semibold" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            }`}
           >
-            Nutrition
-          </Link>
-          <Link
-            href="/history"
-            className="rounded-lg border border-slate-800 bg-slate-900 px-3.5 py-1.5 text-xs md:text-sm font-medium hover:bg-slate-800 transition"
+            7 Days
+          </button>
+          <button
+            onClick={() => setDays(14)}
+            className={`rounded-md px-3 py-1.5 font-medium transition ${
+              days === 14 ? "bg-[var(--accent)] text-[#06121A] font-semibold" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            }`}
           >
-            History
-          </Link>
-          <Link
-            href="/dashboard"
-            className="rounded-lg border border-slate-800 bg-slate-900 px-3.5 py-1.5 text-xs md:text-sm font-medium hover:bg-slate-800 transition"
+            14 Days
+          </button>
+          <button
+            onClick={() => setDays(30)}
+            className={`rounded-md px-3 py-1.5 font-medium transition ${
+              days === 30 ? "bg-[var(--accent)] text-[#06121A] font-semibold" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            }`}
           >
-            Dashboard
-          </Link>
-          <Link
-            href="/workout"
-            className="rounded-lg bg-blue-600 px-4 py-1.5 text-xs md:text-sm font-semibold text-white hover:bg-blue-500 shadow-md shadow-blue-600/30 transition"
-          >
-            + Start Workout
-          </Link>
+            30 Days
+          </button>
         </div>
-      </header>
+      </div>
 
       {/* Error notification */}
       {error && (

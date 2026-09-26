@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/api/config";
+import Navbar from "@/components/Navbar";
 
 interface GymItem {
   id: number;
@@ -155,10 +156,10 @@ export default function PlannerPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)]">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent"></div>
-          <p className="text-slate-400 text-sm">Matching gym suitability & generating weekly planner...</p>
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent"></div>
+          <p className="text-[var(--text-secondary)] text-sm">Matching gym suitability & generating weekly planner...</p>
         </div>
       </main>
     );
@@ -166,13 +167,13 @@ export default function PlannerPage() {
 
   if (error) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white p-6">
-        <div className="max-w-md rounded-2xl border border-red-900 bg-slate-900 p-8 text-center shadow-xl">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)] p-6">
+        <div className="max-w-md rounded-2xl border border-red-900/60 bg-[var(--bg-surface)] p-8 text-center shadow-none">
           <h1 className="text-2xl font-bold text-red-400">Service Error</h1>
-          <p className="mt-3 text-slate-300 text-sm">{error}</p>
+          <p className="mt-3 text-[var(--text-secondary)] text-sm">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-6 rounded-lg bg-red-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-red-500 transition"
+            className="mt-6 rounded-lg bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-[#06121A] hover:opacity-90 transition"
           >
             Retry
           </button>
@@ -192,61 +193,23 @@ export default function PlannerPage() {
   });
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white p-6 md:p-10">
-      <div className="mx-auto max-w-6xl space-y-8">
+    <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] p-6 md:p-10">
+      <div className="mx-auto max-w-7xl space-y-8">
         
-        {/* Header Bar */}
-        <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-indigo-900/60 border border-indigo-500 px-3 py-0.5 text-xs font-semibold text-indigo-300">
-                AI Recommender & Planner
-              </span>
-            </div>
-            <h1 className="text-3xl font-extrabold tracking-tight mt-2 text-white">
-              Gym Recommender & Workout Planner
-            </h1>
-            <p className="text-slate-400 text-sm mt-1">
-              Personalized gym suitability scoring and adaptive weekly workout schedule design.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium hover:bg-slate-800 transition"
-            >
-              Dashboard
-            </button>
-            <button
-              onClick={() => router.push("/workout")}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold hover:bg-indigo-500 shadow-md shadow-indigo-600/30 transition"
-            >
-              + Start Workout
-            </button>
-            <button
-              onClick={() => router.push("/habit")}
-              className="rounded-lg border border-indigo-600/50 bg-indigo-950/40 px-4 py-2 text-sm font-medium text-indigo-300 hover:bg-indigo-900/60 transition"
-            >
-              Habit Tracker
-            </button>
-            <button
-              onClick={() => router.push("/buddy")}
-              className="rounded-lg border border-teal-600/50 bg-teal-950/40 px-4 py-2 text-sm font-medium text-teal-300 hover:bg-teal-900/60 transition"
-            >
-              Gym Buddy
-            </button>
-          </div>
-        </header>
+        {/* Shared Unified Header Navigation */}
+        <Navbar
+          title="PulseAi"
+          subtitle="Gym Recommender & Workout Planner — Personalized gym suitability scoring and adaptive weekly workout schedule design."
+        />
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-4 border-b border-slate-800 pb-2">
+        <div className="flex items-center gap-3 border-b border-[var(--border)] pb-4">
           <button
             onClick={() => setActiveTab("gyms")}
             className={`px-5 py-2.5 text-sm font-bold rounded-xl transition ${
               activeTab === "gyms"
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-                : "bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white"
+                ? "bg-[var(--accent)] text-[#06121A]"
+                : "border border-[var(--border)] bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent)]"
             }`}
           >
             🏋️ Gym Recommender ({filteredRecommendations.length})
@@ -256,8 +219,8 @@ export default function PlannerPage() {
             onClick={() => setActiveTab("planner")}
             className={`px-5 py-2.5 text-sm font-bold rounded-xl transition ${
               activeTab === "planner"
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-                : "bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white"
+                ? "bg-[var(--accent)] text-[#06121A]"
+                : "border border-[var(--border)] bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent)]"
             }`}
           >
             📅 Weekly Workout Planner
@@ -269,20 +232,20 @@ export default function PlannerPage() {
           <div className="space-y-6">
             
             {/* Search Filter & Context Bar */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-4">
               <div className="w-full sm:w-80">
                 <input
                   type="text"
                   placeholder="Search by equipment, location, or facility..."
                   value={gymSearch}
                   onChange={(e) => setGymSearch(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:border-[var(--accent)] focus:outline-none"
                 />
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
-                <div className="text-xs text-slate-400">
-                  Personalized for goal: <strong className="text-indigo-400 capitalize">{userGoal}</strong>
+                <div className="text-xs text-[var(--text-secondary)]">
+                  Personalized for goal: <strong className="text-[var(--accent)] capitalize">{userGoal}</strong>
                 </div>
                 <button
                   type="button"
@@ -294,7 +257,7 @@ export default function PlannerPage() {
                       : "gym near me";
                     window.open(`https://www.google.com/maps/search/${encodeURIComponent(queryGoal)}`, "_blank");
                   }}
-                  className="rounded-lg border border-indigo-500/50 bg-indigo-950/60 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-900/80 transition flex items-center gap-1.5"
+                  className="rounded-lg border border-[var(--border)] bg-transparent px-3.5 py-1.5 text-xs font-semibold text-[var(--accent)] hover:bg-[var(--accent)]/10 hover:border-[var(--accent)] transition flex items-center gap-1.5"
                 >
                   📍 Find More Gyms Near Me (Google Maps)
                 </button>
@@ -306,46 +269,46 @@ export default function PlannerPage() {
               {filteredRecommendations.map((rec) => (
                 <div
                   key={rec.gym.id}
-                  className="rounded-2xl border border-slate-800 bg-slate-900 p-6 flex flex-col justify-between shadow-xl space-y-4 hover:border-slate-700 transition"
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-6 flex flex-col justify-between shadow-none space-y-4 hover:border-[var(--accent)]/50 transition"
                 >
                   <div>
                     {/* Header line: Gym Name & Suitability Badge */}
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h3 className="text-xl font-bold text-white">{rec.gym.name}</h3>
-                        <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                        <h3 className="text-xl font-bold text-[var(--text-primary)]">{rec.gym.name}</h3>
+                        <p className="text-xs text-[var(--text-secondary)] mt-1 flex items-center gap-1">
                           📍 {rec.gym.address}, {rec.gym.city}
                         </p>
                       </div>
 
                       <div className="flex flex-col items-end">
-                        <span className="rounded-full border border-indigo-500/50 bg-indigo-950 px-3 py-1 text-xs font-bold text-indigo-300">
+                        <span className="rounded-full border border-[var(--accent)]/40 bg-transparent px-3 py-1 text-xs font-bold text-[var(--accent)]">
                           {rec.suitability_score}% Suitability
                         </span>
-                        <span className="text-[10px] text-slate-400 mt-1">{rec.match_category}</span>
+                        <span className="text-[10px] text-[var(--text-secondary)] mt-1">{rec.match_category}</span>
                       </div>
                     </div>
 
                     {/* Metadata line: Rating & Price */}
-                    <div className="flex items-center gap-4 my-3 text-xs text-slate-300 border-y border-slate-800 py-2.5">
-                      <div className="flex items-center gap-1 text-amber-400 font-bold">
+                    <div className="flex items-center gap-4 my-3 text-xs text-[var(--text-secondary)] border-y border-[var(--border)] py-2.5">
+                      <div className="flex items-center gap-1 text-amber-400 font-bold font-mono">
                         ★ {rec.gym.rating.toFixed(1)} / 5.0
                       </div>
                       <div>
-                        Price Tier: <span className="font-semibold capitalize text-indigo-300">{rec.gym.price_category.replace("_", " ")}</span>
+                        Price Tier: <span className="font-semibold capitalize text-[var(--accent)]">{rec.gym.price_category.replace("_", " ")}</span>
                       </div>
                       <div>
-                        Hours: <span className="text-slate-400">{rec.gym.opening_hours}</span>
+                        Hours: <span className="text-[var(--text-primary)]">{rec.gym.opening_hours}</span>
                       </div>
                     </div>
 
                     {/* Match Reasons List */}
                     <div className="space-y-1.5 my-3">
-                      <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Match Explanations</div>
-                      <ul className="space-y-1 text-xs text-slate-300">
+                      <div className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Match Explanations</div>
+                      <ul className="space-y-1 text-xs text-[var(--text-primary)]">
                         {rec.match_reasons.map((reason, idx) => (
                           <li key={idx} className="flex items-start gap-1.5">
-                            <span className="text-indigo-400">✓</span>
+                            <span className="text-[var(--accent)] font-bold">✓</span>
                             <span>{reason}</span>
                           </li>
                         ))}
@@ -354,10 +317,10 @@ export default function PlannerPage() {
 
                     {/* Equipment Tags */}
                     <div className="space-y-1.5 pt-2">
-                      <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Available Infrastructure</div>
+                      <div className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Available Infrastructure</div>
                       <div className="flex flex-wrap gap-1.5">
                         {rec.gym.equipment.map((eq, idx) => (
-                          <span key={idx} className="rounded-md bg-slate-950 border border-slate-800 px-2 py-0.5 text-[11px] text-slate-300">
+                          <span key={idx} className="rounded-md bg-transparent border border-[var(--border)] px-2 py-0.5 text-[11px] text-[var(--text-secondary)]">
                             {eq}
                           </span>
                         ))}
@@ -365,7 +328,7 @@ export default function PlannerPage() {
                     </div>
                   </div>
 
-                  <div className="text-[10px] text-slate-500 italic pt-2 border-t border-slate-800/60">
+                  <div className="text-[10px] text-[var(--text-secondary)] italic pt-2 border-t border-[var(--border)]">
                     Sample Demo Gym Data • Grounded Recommendation Algorithm
                   </div>
                 </div>
@@ -380,10 +343,10 @@ export default function PlannerPage() {
           <div className="space-y-6">
             
             {/* Control Bar */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-6">
               <div>
-                <h3 className="text-lg font-bold text-white">Interactive 7-Day Workout Planner</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <h3 className="text-lg font-bold text-[var(--text-primary)]">Interactive 7-Day Workout Planner</h3>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
                   Dynamically structured for your goal with biomechanical posture & behavioral habit adaptivity.
                 </p>
               </div>
@@ -392,7 +355,7 @@ export default function PlannerPage() {
                 <select
                   value={selectedGoal}
                   onChange={(e) => setSelectedGoal(e.target.value)}
-                  className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                  className="rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
                 >
                   <option value="hypertrophy">Hypertrophy (Muscle Gain)</option>
                   <option value="strength">Strength (Power & Heavy Loading)</option>
@@ -404,7 +367,7 @@ export default function PlannerPage() {
                 <button
                   onClick={handleGeneratePlan}
                   disabled={generating}
-                  className="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-500 shadow-md shadow-indigo-600/30 transition disabled:opacity-50"
+                  className="rounded-lg bg-[var(--accent)] px-5 py-2 text-sm font-semibold text-[#06121A] hover:opacity-90 transition disabled:opacity-50"
                 >
                   {generating ? "Generating..." : "Generate New Plan"}
                 </button>
@@ -413,26 +376,26 @@ export default function PlannerPage() {
 
             {/* Plan Info Banner */}
             {activePlan && (
-              <div className="rounded-2xl border border-indigo-900/50 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 p-6 shadow-xl space-y-3">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-6 shadow-none space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <span className="rounded-full bg-indigo-900/60 border border-indigo-500 px-3 py-0.5 text-xs font-semibold text-indigo-300">
+                    <span className="rounded-full border border-[var(--accent)]/40 bg-transparent px-3 py-0.5 text-xs font-semibold text-[var(--accent)]">
                       Active Weekly Plan
                     </span>
-                    <h2 className="text-2xl font-bold text-white mt-1">{activePlan.plan_name}</h2>
-                    <p className="text-xs text-slate-300 mt-1">
-                      Target Split: <strong className="text-indigo-300">{activePlan.target_split}</strong> • {activePlan.days_per_week} Training Days / Week
+                    <h2 className="text-2xl font-bold text-[var(--text-primary)] mt-1">{activePlan.plan_name}</h2>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">
+                      Target Split: <strong className="text-[var(--accent)]">{activePlan.target_split}</strong> • <span className="font-mono text-[var(--accent)]">{activePlan.days_per_week}</span> Training Days / Week
                     </p>
                   </div>
 
                   <div className="flex gap-2">
                     {activePlan.habit_adapted && (
-                      <span className="rounded-lg bg-amber-950 border border-amber-700 px-3 py-1 text-xs font-bold text-amber-300">
+                      <span className="rounded-lg border border-amber-500/40 bg-transparent px-3 py-1 text-xs font-bold text-amber-300">
                         Habit Adapted
                       </span>
                     )}
                     {activePlan.performance_adapted && (
-                      <span className="rounded-lg bg-teal-950 border border-teal-700 px-3 py-1 text-xs font-bold text-teal-300">
+                      <span className="rounded-lg border border-[var(--accent-live)]/40 bg-transparent px-3 py-1 text-xs font-bold text-[var(--accent-live)]">
                         Performance Adapted
                       </span>
                     )}
@@ -440,7 +403,7 @@ export default function PlannerPage() {
                 </div>
 
                 {activePlan.adaptation_notes && (
-                  <div className="text-xs text-indigo-300 bg-indigo-950/60 border border-indigo-800/60 p-3 rounded-xl leading-relaxed">
+                  <div className="text-xs text-[var(--text-primary)] bg-[var(--bg-base)] border border-[var(--border)] p-3 rounded-xl leading-relaxed">
                     💡 <strong>Adaptation Cues:</strong> {activePlan.adaptation_notes}
                   </div>
                 )}
@@ -453,22 +416,22 @@ export default function PlannerPage() {
                 {activePlan.items.map((item) => (
                   <div
                     key={item.id}
-                    className={`rounded-2xl border p-5 space-y-3 shadow-lg transition ${
+                    className={`rounded-2xl border p-5 space-y-3 shadow-none transition ${
                       item.is_rest_day
-                        ? "border-slate-800/80 bg-slate-950/60"
-                        : "border-slate-800 bg-slate-900"
+                        ? "border-[var(--border)] bg-[var(--bg-surface)]/60"
+                        : "border-[var(--border)] bg-[var(--bg-surface)]"
                     }`}
                   >
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
                       <div>
-                        <span className="text-xs font-mono font-semibold text-indigo-400 uppercase">{item.day_of_week}</span>
-                        <h4 className="text-base font-bold text-white mt-0.5">{item.day_title}</h4>
+                        <span className="text-xs font-mono font-semibold text-[var(--accent)] uppercase">{item.day_of_week}</span>
+                        <h4 className="text-base font-bold text-[var(--text-primary)] mt-0.5">{item.day_title}</h4>
                       </div>
 
                       <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase ${
                         item.is_rest_day
-                          ? "bg-slate-800 text-slate-400"
-                          : "bg-emerald-950 text-emerald-300 border border-emerald-800"
+                          ? "border border-[var(--border)] bg-transparent text-[var(--text-secondary)]"
+                          : "border border-[var(--accent-live)]/40 bg-transparent text-[var(--accent-live)]"
                       }`}>
                         {item.is_rest_day ? "Rest Day" : "Workout"}
                       </span>
@@ -477,21 +440,21 @@ export default function PlannerPage() {
                     {!item.is_rest_day ? (
                       <div className="space-y-3">
                         {item.warmup_notes && (
-                          <div className="text-[11px] text-teal-300 bg-teal-950/40 border border-teal-800/50 p-2 rounded-lg">
+                          <div className="text-[11px] text-[var(--text-primary)] bg-[var(--bg-base)] border border-[var(--border)] p-2 rounded-lg">
                             ⚡ <strong>Warmup/Technique:</strong> {item.warmup_notes}
                           </div>
                         )}
 
                         <div className="space-y-2">
-                          <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Prescribed Exercises</div>
+                          <div className="text-[11px] font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Prescribed Exercises</div>
                           {item.exercises.map((ex, idx) => (
-                            <div key={idx} className="rounded-xl border border-slate-800 bg-slate-950 p-3 flex flex-col justify-between gap-1">
+                            <div key={idx} className="rounded-xl border border-[var(--border)] bg-[var(--bg-base)] p-3 flex flex-col justify-between gap-1">
                               <div className="flex items-center justify-between">
-                                <span className="text-xs font-bold text-white">{ex.name}</span>
-                                <span className="text-xs font-mono font-bold text-indigo-300">{ex.sets} sets × {ex.reps_or_duration}</span>
+                                <span className="text-xs font-bold text-[var(--text-primary)]">{ex.name}</span>
+                                <span className="text-xs font-mono font-bold text-[var(--accent)]">{ex.sets} sets × {ex.reps_or_duration}</span>
                               </div>
                               {ex.technique_cue && (
-                                <p className="text-[11px] text-slate-400 italic">
+                                <p className="text-[11px] text-[var(--text-secondary)] italic">
                                   Cue: {ex.technique_cue}
                                 </p>
                               )}
@@ -500,7 +463,7 @@ export default function PlannerPage() {
                         </div>
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-500 italic py-2">
+                      <p className="text-xs text-[var(--text-secondary)] italic py-2">
                         Focus on active recovery, hydration, foam rolling, and mobility work.
                       </p>
                     )}

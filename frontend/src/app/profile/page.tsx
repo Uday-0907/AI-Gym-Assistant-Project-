@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/api/config";
+import Navbar from "@/components/Navbar";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -146,44 +147,29 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-slate-950 text-white">
-        <p className="text-slate-400">Loading your profile...</p>
+      <main className="flex min-h-screen items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)]">
+        <p className="text-[var(--text-secondary)]">Loading your profile...</p>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 p-6 md:p-10 text-white">
-      <div className="mx-auto max-w-3xl">
-        {/* Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-800 pb-6">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Fitness Profile & Onboarding
-            </h1>
-            <p className="mt-2 text-slate-400 text-sm">
-              Update your physical measurements and personal goals for tailored AI recommendations.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => router.push("/dashboard")}
-            className="self-start sm:self-auto rounded-lg border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm font-medium hover:bg-slate-800 transition"
-          >
-            ← Back to Dashboard
-          </button>
-        </div>
+    <main className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
+      <Navbar
+        title="PulseAi"
+        subtitle="Fitness Profile & Onboarding — Update physical measurements and personal goals for tailored AI recommendations."
+      />
+      <div className="mx-auto max-w-3xl p-6 md:p-10">
 
         {/* Account Info Bar */}
-        <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex flex-wrap gap-6 text-sm text-slate-300">
+        <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-5 flex flex-wrap gap-6 text-sm text-[var(--text-secondary)] shadow-none">
           <div>
-            <span className="text-slate-500">Account Name:</span>{" "}
-            <span className="font-semibold text-white">{name || "User"}</span>
+            <span className="text-[var(--text-secondary)]">Account Name:</span>{" "}
+            <span className="font-semibold text-[var(--text-primary)]">{name || "User"}</span>
           </div>
           <div>
-            <span className="text-slate-500">Email:</span>{" "}
-            <span className="font-semibold text-white">{email}</span>
+            <span className="text-[var(--text-secondary)]">Email:</span>{" "}
+            <span className="font-semibold text-[var(--text-primary)]">{email}</span>
           </div>
         </div>
 
@@ -195,12 +181,12 @@ export default function ProfilePage() {
         )}
 
         {success && (
-          <div className="mt-6 rounded-lg bg-emerald-900/30 border border-emerald-800 p-4 text-sm text-emerald-400 flex items-center justify-between">
+          <div className="mt-6 rounded-lg bg-[var(--accent-live)]/10 border border-[var(--accent-live)]/40 p-4 text-sm text-[var(--accent-live)] flex items-center justify-between">
             <span>✓ {success}</span>
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="underline text-emerald-300 hover:text-emerald-200 text-xs font-medium ml-4"
+              className="underline text-[var(--accent)] hover:opacity-80 text-xs font-medium ml-4"
             >
               View Dashboard →
             </button>
@@ -208,29 +194,29 @@ export default function ProfilePage() {
         )}
 
         {/* Profile Form */}
-        <form onSubmit={handleSave} className="mt-6 rounded-xl border border-slate-800 bg-slate-900 p-8 space-y-6">
+        <form onSubmit={handleSave} className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-8 space-y-6 shadow-none">
           {/* Row 1: Date of Birth & Gender */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
                 Date of Birth
               </label>
               <input
                 type="date"
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500 transition"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition"
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
                 Gender
               </label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500 transition"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition"
               >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
@@ -244,7 +230,7 @@ export default function ProfilePage() {
           {/* Row 2: Height & Weight */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
                 Height (cm)
               </label>
               <input
@@ -255,12 +241,12 @@ export default function ProfilePage() {
                 placeholder="e.g. 175.0"
                 value={heightCm}
                 onChange={(e) => setHeightCm(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500 transition"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition"
               />
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
                 Weight (kg)
               </label>
               <input
@@ -271,20 +257,20 @@ export default function ProfilePage() {
                 placeholder="e.g. 70.0"
                 value={weightKg}
                 onChange={(e) => setWeightKg(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500 transition"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition"
               />
             </div>
           </div>
 
           {/* Row 3: Fitness Goal */}
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-300">
+            <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
               Primary Fitness Goal
             </label>
             <select
               value={fitnessGoal}
               onChange={(e) => setFitnessGoal(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500 transition"
+              className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition"
             >
               <option value="">Select a Goal</option>
               <option value="muscle_gain">Muscle Gain (Hypertrophy)</option>
@@ -299,13 +285,13 @@ export default function ProfilePage() {
           {/* Row 4: Activity Level & Dietary Preference */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
                 Activity Level
               </label>
               <select
                 value={activityLevel}
                 onChange={(e) => setActivityLevel(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500 transition"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition"
               >
                 <option value="">Select Activity Level</option>
                 <option value="sedentary">Sedentary (Little or no exercise)</option>
@@ -317,13 +303,13 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300">
+              <label className="mb-2 block text-sm font-medium text-[var(--text-secondary)]">
                 Dietary Preference
               </label>
               <select
                 value={dietaryPreference}
                 onChange={(e) => setDietaryPreference(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-blue-500 transition"
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-base)] px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition"
               >
                 <option value="">Select Dietary Preference</option>
                 <option value="no_preference">No Specific Preference</option>
@@ -342,7 +328,7 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={saving}
-              className="w-full sm:w-auto rounded-lg bg-blue-600 px-8 py-3.5 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 transition"
+              className="w-full sm:w-auto rounded-lg bg-[var(--accent)] px-8 py-3.5 font-semibold text-[#06121A] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 transition shadow-none"
             >
               {saving ? "Saving Changes..." : "Save Profile"}
             </button>
@@ -350,7 +336,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="w-full sm:w-auto rounded-lg border border-slate-700 px-6 py-3.5 font-medium text-slate-300 hover:bg-slate-800 transition"
+              className="w-full sm:w-auto rounded-lg border border-[var(--border)] px-6 py-3.5 font-medium text-[var(--text-secondary)] hover:bg-[var(--border)]/30 transition"
             >
               Return to Dashboard
             </button>

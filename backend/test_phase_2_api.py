@@ -87,10 +87,45 @@ async def asgi_request(method: str, path: str, headers: dict = None, body=None):
 class TestPhase2API(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # Create valid JWT token for existing User ID 2
-        cls.user_id = 2
-        cls.token = create_access_token(user_id=cls.user_id)
-        cls.headers = {"Authorization": f"Bearer {cls.token}"}
+        # Create dedicated test users for Phase 2 API tests
+        with SessionLocal() as db:
+            for email in ["phase2_user_primary@example.com", "phase2_user_secondary@example.com"]:
+                old = db.query(User).filter(User.email == email).first()
+                if old:
+                    db.delete(old)
+            db.commit()
+
+            cls.user_primary = User(
+                name="Phase 2 Primary User",
+                email="phase2_user_primary@example.com",
+                password_hash="test_password_hash",
+            )
+            cls.user_secondary = User(
+                name="Phase 2 Secondary User",
+                email="phase2_user_secondary@example.com",
+                password_hash="test_password_hash",
+            )
+            db.add_all([cls.user_primary, cls.user_secondary])
+            db.commit()
+            db.refresh(cls.user_primary)
+            db.refresh(cls.user_secondary)
+
+            cls.user_id = cls.user_primary.id
+            cls.token = create_access_token(user_id=cls.user_id)
+            cls.headers = {"Authorization": f"Bearer {cls.token}"}
+
+            cls.secondary_user_id = cls.user_secondary.id
+            cls.secondary_token = create_access_token(user_id=cls.secondary_user_id)
+            cls.secondary_headers = {"Authorization": f"Bearer {cls.secondary_token}"}
+
+    @classmethod
+    def tearDownClass(cls):
+        with SessionLocal() as db:
+            for email in ["phase2_user_primary@example.com", "phase2_user_secondary@example.com"]:
+                u = db.query(User).filter(User.email == email).first()
+                if u:
+                    db.delete(u)
+            db.commit()
 
     def test_01_get_exercises_catalogue(self):
         """GET /exercises returns catalogue of available exercises."""
@@ -224,8 +259,8 @@ class TestPhase2API(unittest.TestCase):
         user2_headers = self.headers
 
         # Token for User 1
-        user1_token = create_access_token(user_id=1)
-        user1_headers = {"Authorization": f"Bearer {user1_token}"}
+        user1_token = self.secondary_token
+        user1_headers = self.secondary_headers
 
         # 1. User 2 starts a session
         status_code, start_data = asyncio.run(
